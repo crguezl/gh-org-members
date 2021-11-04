@@ -7,11 +7,12 @@ gh extension install crguezl/gh-org-members
 ## Help
 
 ```
+✗ gh help org-members                        
 Usage: gh org-members [options] [organization] [options]
 
 Options:
   -V, --version          output the version number
-  -d, --debug            output extra debugging
+  -f, --fullname         show name of the user (if filled)
   -r, --regexp <regexp>  filter <query> results using <regexp>
   -o --org <org>         default organization or user
   -h, --help             display help for command

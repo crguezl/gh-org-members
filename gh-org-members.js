@@ -12,7 +12,7 @@ program.version(require('./package.json').version);
 
 program
   .name("gh org-members [options] [organization]")
-  .option('-d, --debug', 'output extra debugging')
+  .option('-f, --fullname', 'show name of the user (if filled)')
   .option('-r, --regexp <regexp>', 'filter <query> results using <regexp>')
   .option('-o --org <org>', 'default organization or user');
 
@@ -96,12 +96,14 @@ if (org) {
   //console.log(result);
 
   result.forEach((user, i) => {
-    //console.log(user);
-    let userInfo = JSON.parse(gh(`api ${user.url}`));
-    let name = userInfo.name || ""
-    let login =  user.login;
-    //console.log(JSON.stringify(userInfo))
-    let output = `${login}: ${name}`;
-    if (regexp.test(String(name)) || regexp.test(login)) console.log(output)
+    let login =  output = user.login;
+    
+    if (options.fullname) {
+      let userInfo = JSON.parse(gh(`api ${user.url}`));
+      let name = userInfo.name || ""
+    
+      output += `: ${name}`;
+    }
+    if (regexp.test(String(output))) console.log(output)
   })
 }

@@ -84,6 +84,12 @@ if (!options.org && (program.args.length == 1) ) options.org = program.args[0];
 
 let org = options.org || process.env["GITHUB_ORG"] || getUserLogin();
 
+let regexp = /./;
+if (options.regexp) {
+  //console.log(options.regexp);
+  regexp = new RegExp(options.regexp,'i');
+  //console.log(regexp.source);
+}
 
 if (org) {
   let result = JSON.parse(gh(`api --paginate "/orgs/${org}/members"`));
@@ -93,7 +99,9 @@ if (org) {
     //console.log(user);
     let userInfo = JSON.parse(gh(`api ${user.url}`));
     let name = userInfo.name || ""
+    let login =  user.login;
     //console.log(JSON.stringify(userInfo))
-    console.log(`${user.login}: ${name}`)
+    let output = `${login}: ${name}`;
+    if (regexp.test(String(name)) || regexp.test(login)) console.log(output)
   })
 }

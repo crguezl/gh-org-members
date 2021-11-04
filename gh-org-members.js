@@ -82,7 +82,7 @@ debugger;
 
 if (!options.org && (program.args.length == 1) ) options.org = program.args[0];
 
-let org = options.org || process.env["GITHUB_ORG"] || getUserLogin();
+let org = options.org || process.env["GITHUB_ORG"];
 
 let regexp = /./;
 if (options.regexp) {
@@ -90,6 +90,8 @@ if (options.regexp) {
   regexp = new RegExp(options.regexp,'i');
   //console.log(regexp.source);
 }
+
+if (!org) program.help();
 
 if (org) {
   let result = JSON.parse(gh(`api --paginate "/orgs/${org}/members"`));

@@ -3,7 +3,6 @@ const deb = (...args) => {
     if (debug) console.log(ins(...args, {depth: null})); 
 };
 
-const fs = require("fs");
 const shell = require('shelljs');
 const { Command } = require('commander');
 
@@ -61,20 +60,8 @@ function shContinue(executable, ...args) {
   return result;
 }
 
-function shStderr(executable, ...args) {
-  
-  let command = `${executable} ${args.join('')}`;
-  // console.log(command);
-  let result = shell.exec(command, {silent: true});
-  return result.stderr; 
-}
-
-
 const gh = (...args) => sh("gh", ...args);
 const ghCont = (...args) => shContinue("gh", ...args);
-const ghCode = (...args) => shStderr("gh", ...args);
-
-let repoList;
 
 debugger;
 

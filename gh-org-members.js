@@ -12,7 +12,7 @@ program.version(require('./package.json').version);
 
 program
   .name("gh org-members [options] [organization]")
-  .option('-f, --fullname', 'show name of the user (if filled)')
+  .option('-f, --fullname', 'show name of the user (if available)')
   .option('-j, --json', 'returns the full json object')
   .option('-r, --regexp <regexp>', 'filter <query> results using <regexp>')
   .option('-o --org <org>', 'default organization or user');
@@ -92,7 +92,14 @@ if (options.regexp) {
 if (!org) program.help();
 
 if (org) {
-  let result = JSON.parse(gh(`api --paginate "/orgs/${org}/members"`));
+  let result = ghCont(`api --paginate "/orgs/${org}/members"`);
+
+  if (result.stderr) {
+    if (/Not.*Found.*HTTP\s+404/.test(result.stderr)) showError(`Org "${org}" not found!`)
+    showError(result.stderr)
+  }
+  
+  result = JSON.parse(result.stdout);
   
   if (options.json) {
      console.log(JSON.stringify(result, null, 2));

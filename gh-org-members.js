@@ -4,7 +4,6 @@ const deb = (...args) => {
   if (debug) console.log(ins(...args, { depth: null }));
 };
 
-const fs = require("fs");
 const shell = require('shelljs');
 const { Command } = require('commander');
 
@@ -62,8 +61,6 @@ function shContinue(executable, arg, cb) {
   return result;
 }
 
-
-
 function shStderr(executable, ...args) {
 
   let command = `${executable} ${args.join('')}`;
@@ -75,9 +72,6 @@ function shStderr(executable, ...args) {
 
 const gh = (...args) => sh("gh", ...args);
 const ghCont = (arg,cb) => shContinue("gh", arg, cb);
-const ghCode = (...args) => shStderr("gh", ...args);
-
-let repoList;
 
 debugger;
 
@@ -87,9 +81,7 @@ let org = options.org || process.env["GITHUB_ORG"];
 
 let regexp = /./;
 if (options.regexp) {
-  //console.log(options.regexp);
   regexp = new RegExp(options.regexp, 'i');
-  //console.log(regexp.source);
 }
 
 if (!org) program.help();

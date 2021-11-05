@@ -20,7 +20,6 @@
   },
   "homepage": "https://github.com/crguezl/gh-org-members#readme",
   "dependencies": {
-    "async": "^3.2.2",
     "commander": "^8.2.0",
     "shelljs": "^0.8.4"
   }

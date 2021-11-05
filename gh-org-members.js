@@ -1,5 +1,4 @@
 const ins = require("util").inspect;
-const map = require("async/map");
 
 const deb = (...args) => {
   if (debug) console.log(ins(...args, { depth: null }));
@@ -113,16 +112,32 @@ if (options.json) {
 let logins = members.map(m => m.login).filter(login => regexp.test(login));
 
 if (options.fullname) {
-  let getUserName = (user, cb) => {
-    shell.exec(`gh api ${user.url})`, cb);
-  }
+  process.setMaxListeners(0);
 
-  map(members, getUserName)
-  .then(
-    names => console.log(names.join("\n"))
-  ).catch(err => console.log(err)) 
+  let getUserName = (user, cb) => shell.exec(`gh api ${user.url}`, {silent: true, async: true}, cb);
+
+  let count = 0;
+  let users = [];
+  members.forEach((m,i)  => {
+    getUserName(m, (err, userInfo) => {
+       if (err) {
+         count++
+         users[i] = logins[i]+": Error accesing this user"
+       } else {
+         userInfo = JSON.parse(userInfo);
+         count++
+         // console.log(userInfo);
+         users[i] = logins[i]+": "+(userInfo.name || "Not filled name");
+         if (count === members.length) {
+          console.log(users.join("\n"));
+         }
+       }
+    })
+  })
+} else {
+  console.log(logins.join("\n"));
 }
 
-console.log(logins.join("\n"));
 
-
+// gh org-members ULL-MFP-AET-2122 -f  2,84s user 1,11s system 122% cpu 3,218 total
+// gh org-members ULL-MFP-AET-2122 -f  2,73s user 1,08s system 119% cpu 3,193 total

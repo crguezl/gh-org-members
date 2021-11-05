@@ -58,10 +58,7 @@ function shContinue(executable, ...args) {
   let command = `${executable} ${args.join('')}`;
   deb(command);
   let result = shell.exec(command, {silent: true});
-  if (result.code !== 0) {
-    shell.echo(`Error: Command "${command}" failed\n${result.stderr}`);
-  }    
-  return result.stdout.replace(/\s+$/,'');
+  return result;
 }
 
 function shStderr(executable, ...args) {

@@ -115,14 +115,16 @@ if (options.fullname) {
        if (err) {
          count++
          users[i] = logins[i]+": Error accesing this user"
+         console.log(users[i]);
        } else {
          userInfo = JSON.parse(userInfo);
          count++
          // console.log(userInfo);
          users[i] = logins[i]+": "+(userInfo.name || "Not filled name");
-         if (count === members.length) {
-          console.log(users.join("\n"));
-         }
+         console.log(users[i])
+         //if (count === members.length) {
+         // console.log(users.join("\n"));
+         //}
        }
     })
   })

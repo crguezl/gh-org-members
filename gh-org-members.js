@@ -104,14 +104,21 @@ if (options.json) {
 let logins = members.map(m => m.login).filter(login => regexp.test(login));
 
 if (options.fullname) {
-  process.setMaxListeners(0);
+  process.setMaxListeners(members.length);
 
-  let getUserName = (user, cb) => shell.exec(`gh api ${user.url}`, {silent: true, async: true}, cb);
+  // let getUserName = (user, cb) => shell.exec(`gh api ${user.url}`, {silent: true, async: true}, cb);
+  let getUserName = (user, cb) => shell.exec(`gh api graphql -f query='
+  query  {
+    user(login: "${user}") {
+      name
+    }
+  }
+  '`, {silent: true, async: true}, cb);
 
   let count = 0;
   let users = [];
   members.forEach((m,i)  => {
-    getUserName(m, (err, userInfo) => {
+    getUserName(m.login, (err, userInfo) => {
        if (err) {
          count++
          users[i] = logins[i]+": Error accesing this user"
@@ -119,7 +126,7 @@ if (options.fullname) {
        } else {
          userInfo = JSON.parse(userInfo);
          count++
-         users[i] = logins[i]+": "+(userInfo.name || "Not filled name");
+         users[i] = logins[i]+": "+(userInfo.data.user.name || "Not filled name");
          console.log(users[i])
          //if (count === members.length) {
          // console.log(users.join("\n"));
@@ -131,7 +138,7 @@ if (options.fullname) {
   console.log(logins.join("\n"));
 }
 
-// parallel console.log at the end. brnach print-at-the-end
+// parallel console.log at the end. branch print-at-the-end
 // gh org-members ULL-MFP-AET-2122 -f  2,84s user 1,11s system 122% cpu 3,218 total
 // gh org-members ULL-MFP-AET-2122 -f  2,73s user 1,08s system 119% cpu 3,193 total
 
@@ -142,3 +149,25 @@ if (options.fullname) {
 // parallel: print as soon as it is available. branch: main
 // gh org-members ULL-MFP-AET-2122 -f  2,92s user 1,18s system 119% cpu 3,445 total
 // gh org-members ULL-MFP-AET-2122 -f  2,81s user 1,14s system 120% cpu 3,289 total
+
+// graphql only for the username, parallel, print asap 
+// gh org-members ULL-MFP-AET-2122 -f  2,89s user 1,24s system 127% cpu 3,244 total
+// gh org-members ULL-MFP-AET-2122 -f  3,01s user 1,34s system 129% cpu 3,352 total
+
+  /*
+  memmberswithrole
+  query {
+    organization(login: "${org}") {
+      membersWithRole(first: 100) {
+        edges {
+          cursor
+          node {
+            login
+            name
+          }
+          role
+        }
+      }
+    }
+  }
+  */

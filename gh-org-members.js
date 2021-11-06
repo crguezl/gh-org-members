@@ -119,7 +119,6 @@ if (options.fullname) {
        } else {
          userInfo = JSON.parse(userInfo);
          count++
-         // console.log(userInfo);
          users[i] = logins[i]+": "+(userInfo.name || "Not filled name");
          console.log(users[i])
          //if (count === members.length) {
@@ -132,10 +131,14 @@ if (options.fullname) {
   console.log(logins.join("\n"));
 }
 
-// parallel
+// parallel console.log at the end
 // gh org-members ULL-MFP-AET-2122 -f  2,84s user 1,11s system 122% cpu 3,218 total
 // gh org-members ULL-MFP-AET-2122 -f  2,73s user 1,08s system 119% cpu 3,193 total
 
 // sequential
 // gh org-members ULL-MFP-AET-2122 -f  3,31s user 1,16s system 35% cpu 12,754 total
 // gh org-members ULL-MFP-AET-2122 -f  3,36s user 1,18s system 35% cpu 12,784 total
+
+// parallel: print as soon as it is available
+// gh org-members ULL-MFP-AET-2122 -f  2,92s user 1,18s system 119% cpu 3,445 total
+// gh org-members ULL-MFP-AET-2122 -f  2,81s user 1,14s system 120% cpu 3,289 total

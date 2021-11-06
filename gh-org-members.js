@@ -1,4 +1,5 @@
 const ins = require("util").inspect;
+const balanced = require('balanced-match');
 
 const deb = (...args) => {
   if (debug) console.log(ins(...args, { depth: null }));
@@ -87,56 +88,60 @@ if (options.regexp) {
 if (!org) program.help();
 
 
-let result = ghCont(`api --paginate "/orgs/${org}/members"`);
+//let result = ghCont(`api --paginate "/orgs/${org}/members"`);
+let result = ghCont(`api graphql --paginate -f query='
+  query($endCursor: String) {
+    organization(login: "${org}") {
+      membersWithRole(first: 10, after:$endCursor) {
+        pageInfo {
+          hasNextPage,
+          endCursor
+        }
+        edges {
+          node {
+            login
+            name
+          }
+          role
+        }
+      }
+    }
+  }
+'
+`);
 
 if (result.stderr) {
   if (/Not.*Found.*HTTP\s+404/.test(result.stderr)) showError(`Org "${org}" not found!`)
   showError(result.stderr)
 }
 
-let members = JSON.parse(result.stdout);
+let rout = result.stdout;
+//console.log(rout);
+let chunkInfo, members = [];
+
+while (chunkInfo = balanced('{', '}', rout)) {
+  //console.log(chunkInfo);
+  let currentObj = JSON.parse('{'+chunkInfo.body+'}');
+  let currMembers = currentObj.data.organization.membersWithRole.edges.map(x => x.node); 
+  //console.log(currMembers); 
+  members = members.concat(currMembers);  
+  rout = chunkInfo.post;
+
+}
 
 if (options.json) {
   console.log(JSON.stringify(members, null, 2));
   process.exit(0);
 }
 
-let logins = members.map(m => m.login).filter(login => regexp.test(login));
-
 if (options.fullname) {
-  process.setMaxListeners(members.length);
-
-  // let getUserName = (user, cb) => shell.exec(`gh api ${user.url}`, {silent: true, async: true}, cb);
-  let getUserName = (user, cb) => shell.exec(`gh api graphql -f query='
-  query  {
-    user(login: "${user}") {
-      name
-    }
-  }
-  '`, {silent: true, async: true}, cb);
-
-  let count = 0;
-  let users = [];
-  members.forEach((m,i)  => {
-    getUserName(m.login, (err, userInfo) => {
-       if (err) {
-         count++
-         users[i] = logins[i]+": Error accesing this user"
-         console.log(users[i]);
-       } else {
-         userInfo = JSON.parse(userInfo);
-         count++
-         users[i] = logins[i]+": "+(userInfo.data.user.name || "Not filled name");
-         console.log(users[i])
-         //if (count === members.length) {
-         // console.log(users.join("\n"));
-         //}
-       }
-    })
-  })
-} else {
-  console.log(logins.join("\n"));
+  members.forEach(x => console.log(`${x.login}: ${x.name}`))
+  process.exit(0);
 }
+
+members.forEach(x => console.log(x.login))
+
+
 
 // parallel console.log at the end. branch print-at-the-end
 // gh org-members ULL-MFP-AET-2122 -f  2,84s user 1,11s system 122% cpu 3,218 total
@@ -154,10 +159,38 @@ if (options.fullname) {
 // gh org-members ULL-MFP-AET-2122 -f  2,89s user 1,24s system 127% cpu 3,244 total
 // gh org-members ULL-MFP-AET-2122 -f  3,01s user 1,34s system 129% cpu 3,352 total
 
-  /*
-  memmberswithrole
+// GraphQl all 
+// gh org-members ULL-MFP-AET-2122 -f  0,32s user 0,17s system 32% cpu 1,505 total
+// gh org-members ULL-MFP-AET-2122 -f  0,34s user 0,18s system 35% cpu 1,499 total
+
+// Conclusion: A factor of 8 
+
+/*
+  gh api graphql --paginate -f query='
+  query($endCursor: String) {
+    organization(login: "ULL-MFP-AET-2122") {
+      membersWithRole(first: 4, after:$endCursor) {
+        pageInfo { 
+          hasNextPage, 
+          endCursor 
+        }
+
+        edges {
+
+          node {
+            login
+            name
+          }
+          role
+        }
+      }
+    }
+  }
+'
+
+  gh api graphql --paginate -f query='
   query {
-    organization(login: "${org}") {
+    organization(login: "ULL-MFP-AET-2122") {
       membersWithRole(first: 100) {
         edges {
           cursor
@@ -170,4 +203,6 @@ if (options.fullname) {
       }
     }
   }
-  */
+'
+
+*/

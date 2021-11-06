@@ -62,16 +62,6 @@ function shContinue(executable, arg, cb) {
   return result;
 }
 
-function shStderr(executable, ...args) {
-
-  let command = `${executable} ${args.join('')}`;
-  // console.log(command);
-  let result = shell.exec(command, { silent: true });
-  return result.stderr;
-}
-
-
-const gh = (...args) => sh("gh", ...args);
 const ghCont = (arg,cb) => shContinue("gh", arg, cb);
 
 debugger;
@@ -87,8 +77,6 @@ if (options.regexp) {
 
 if (!org) program.help();
 
-
-//let result = ghCont(`api --paginate "/orgs/${org}/members"`);
 let result = ghCont(`api graphql --paginate -f query='
   query($endCursor: String) {
     organization(login: "${org}") {
@@ -111,8 +99,9 @@ let result = ghCont(`api graphql --paginate -f query='
 `);
 
 if (result.stderr) {
-  if (/Not.*Found.*HTTP\s+404/.test(result.stderr)) showError(`Org "${org}" not found!`)
-  showError(result.stderr)
+  let messages = JSON.parse(result.stdout).errors.map(x => x.message);
+  console.log(messages.join("\n"));
+  process.exit(1);
 }
 
 let rout = result.stdout;

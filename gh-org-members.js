@@ -36,7 +36,6 @@ if (!shell.which('gh')) {
   showError('Sorry, this extension requires GitHub Cli (gh) installed!');
 }
 
-
 function showError(error) {
   if (error) {
     console.error(`Error!: ${error}`);
@@ -111,7 +110,11 @@ let chunkInfo, members = [];
 while (chunkInfo = balanced('{', '}', rout)) {
   //console.log(chunkInfo);
   let currentObj = JSON.parse('{'+chunkInfo.body+'}');
-  let currMembers = currentObj.data.organization.membersWithRole.edges.map(x => x.node); 
+  let currMembers = currentObj.data.organization.membersWithRole.edges.map(x =>  {
+    let y = x.node;
+    y.role = x.role.toLowerCase();
+    return y;
+  }); 
   //console.log(currMembers); 
   members = members.concat(currMembers);  
   rout = chunkInfo.post;
@@ -124,7 +127,7 @@ if (options.json) {
 }
 
 if (options.fullname) {
-  members.forEach(x => console.log(`${x.login}: ${x.name}`))
+  members.forEach(x => console.log(`${x.login}: ${x.name} (${x.role})`))
   process.exit(0);
 }
 

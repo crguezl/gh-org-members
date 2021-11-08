@@ -97,6 +97,51 @@ let result = ghCont(`api graphql --paginate -f query='
 '
 `);
 
+/* example of output
+{
+  "data": {
+    "organization": {
+      "membersWithRole": {
+        "pageInfo": {
+          "hasNextPage": true,
+          "endCursor": "Y3Vyc29yOnYyOpHOAVenaQ=="
+        },
+        "edges": [
+          {
+            "node": {
+              "login": "crguezl",
+              "name": "Casiano Rodriguez-Leon"
+            },
+            "role": "ADMIN"
+          },
+          {
+            "node": {
+              "login": "casiano",
+              "name": "Casiano"
+            },
+            "role": "MEMBER"
+          },
+          {
+            "node": {
+              "login": "amarrerod",
+              "name": "Alejandro Marrero"
+            },
+            "role": "MEMBER"
+          },
+          {
+            "node": {
+              "login": "ivan-ga",
+              "name": "Iván González"
+            },
+            "role": "MEMBER"
+          }
+        ]
+      }
+    }
+  }
+}
+*/
+
 if (result.stderr) {
   let messages = JSON.parse(result.stdout).errors.map(x => x.message);
   console.log(messages.join("\n"));

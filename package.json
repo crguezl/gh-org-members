@@ -1,6 +1,6 @@
 {
   "name": "gh-org-members",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "",
   "main": "gh-org-members.js",
   "scripts": {

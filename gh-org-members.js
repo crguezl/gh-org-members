@@ -16,6 +16,7 @@ program
   .option('-f, --fullname', 'show name of the user (if available)')
   .option('-j, --json', 'returns the full json object')
   .option('-r, --regexp <regexp>', 'filter <query> results using <regexp>')
+  .option('-u, --url', 'show github user url')
   .option('-o --org <org>', 'default organization or user');
 
 program.addHelpText('after', `
@@ -88,6 +89,7 @@ let result = ghCont(`api graphql --paginate -f query='
           node {
             login
             name
+            url
           }
           role
         }
@@ -166,13 +168,20 @@ while (chunkInfo = balanced('{', '}', rout)) {
 
 }
 
+members = members.filter(m => regexp.test(m.name) || regexp.test(m.login))
+
 if (options.json) {
   console.log(JSON.stringify(members, null, 2));
   process.exit(0);
 }
 
+if (options.url) {
+  members.forEach(x => console.log(`${x.url}`))
+  process.exit(0);
+}
+
 if (options.fullname) {
-  members.forEach(x => console.log(`${x.login}: ${x.name} (${x.role})`))
+  members.forEach(x => console.log(`${x.login},"${x.name}",${x.role}`))
   process.exit(0);
 }
 

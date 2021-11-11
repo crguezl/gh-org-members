@@ -76,7 +76,13 @@ if (options.regexp) {
   regexp = new RegExp(options.regexp, 'i');
 }
 
-if (!org) program.help();
+if (!org) {
+  let r = shell.exec(`gh browse -n`);
+  if (r.code !== 0 ) program.help();
+  org = r.stdout.split('/').slice(-2)[0];
+  //deb(org);
+}
+
 
 let result = ghCont(`api graphql --paginate -f query='
   query($endCursor: String) {

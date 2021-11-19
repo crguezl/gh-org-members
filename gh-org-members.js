@@ -18,6 +18,7 @@ program
   .option('-r, --regexp <regexp>', 'filter <query> results using <regexp>')
   .option('-u, --url', 'show github user url')
   .option('-w, --orgurl', 'show github user url as a member of the org')
+  .option('-s, --site', 'show url of the members github pages web sites')
   .option('-o --org <org>', 'default organization or user');
 
 program.addHelpText('after', `
@@ -190,6 +191,11 @@ if (options.url) {
 if (options.orgurl) {
   members.map(x => x.orgurl = `https://github.com/orgs/${org}/people/${x.login}`)
   members.forEach(x => console.log(`${x.orgurl}`))
+  process.exit(0);
+}
+
+if (options.site) {
+  members.forEach(x => console.log(`https://${x.login}.github.io`))
   process.exit(0);
 }
 

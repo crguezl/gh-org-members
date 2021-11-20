@@ -177,6 +177,7 @@ while (chunkInfo = balanced('{', '}', rout)) {
 }
 
 members = members.filter(m => regexp.test(m.name) || regexp.test(m.login))
+members.forEach(x => x.site = `https://${x.login}.github.io`)
 
 if (options.json) {
   console.log(JSON.stringify(members, null, 2));
@@ -195,7 +196,7 @@ if (options.orgurl) {
 }
 
 if (options.site) {
-  members.forEach(x => console.log(`https://${x.login}.github.io`))
+  members.forEach(x => console.log(x.site))
   process.exit(0);
 }
 

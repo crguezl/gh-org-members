@@ -7,23 +7,32 @@ const deb = (...args) => {
 
 const shell = require('shelljs');
 const { Command } = require('commander');
+const { setDefaultOrg, fzfGetOrg } = require('@crguezl/gh-utilities');
 
 const program = new Command();
 program.version(require('./package.json').version);
 
 program
-  .name("gh org-members [options] [organization]")
+  .name("gh org-members")
+  .usage("[options] [organization]")
   .option('-f, --fullname', 'show name of the user (if available)')
   .option('-j, --json', 'returns the full json object')
   .option('-r, --regexp <regexp>', 'filter <query> results using <regexp>')
   .option('-u, --url', 'show github user url')
+  .option('-l, --login', 'show github user login')
   .option('-w, --orgurl', 'show github user url as a member of the org')
   .option('-s, --site', 'show url of the members github pages web sites')
-  .option('-o --org <org>', 'default organization or user');
+  .option('-o --org <org>', 'default organization or user')
+  .option('   --default', 'Set selected "org" as default organization for future uses');
 
 program.addHelpText('after', `
-  - You can set the default organization through the GITHUB_ORG environment variable
-`);
+  - If the organization is not explicitly specified or there is a default org, 
+    the selection will be done interactively among the list of your organizations
+  - You can set the default organization through the "--default" option for future uses of this program
+  - When in fzf, use CTRL-A to select all, tab to select/deselect
+  `
+);
+
 
 program.parse(process.argv);
 
@@ -70,7 +79,10 @@ debugger;
 
 if (!options.org && (program.args.length == 1)) options.org = program.args[0];
 
-let org = options.org || process.env["GITHUB_ORG"];
+let org = options.org || fzfGetOrg() || process.env["GITHUB_ORG"];
+
+
+if (options.default) setDefaultOrg(org);
 
 let regexp = /./;
 if (options.regexp) {
@@ -177,8 +189,31 @@ while (chunkInfo = balanced('{', '}', rout)) {
 }
 
 members = members.filter(m => regexp.test(m.name) || regexp.test(m.login))
-members.forEach(x => x.site = `https://${x.login}.github.io`)
 
+// Decorate: add site
+members.forEach(x => x.site = `https://${x.login}.github.io`)
+// TODO: add teams
+
+/*
+answer:
+{
+  "data": {
+    "organization": {
+      "teams": {
+        "totalCount": 1,
+        "edges": [
+          {
+            "node": {
+              "name": "carlos-diaz-calzadilla-alu0101102726",
+              "description": "carlos-diaz-calzadilla-alu0101102726 created by GitHub Classroom"
+            }
+          }
+        ]
+      }
+    }
+  }
+}
+*/
 if (options.json) {
   console.log(JSON.stringify(members, null, 2));
   process.exit(0);
@@ -186,6 +221,10 @@ if (options.json) {
 
 if (options.url) {
   members.forEach(x => console.log(`${x.url}`))
+  process.exit(0);
+}
+if (options.login) {
+  members.forEach(x => console.log(`${x.login}`))
   process.exit(0);
 }
 

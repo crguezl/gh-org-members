@@ -8,6 +8,7 @@ const deb = (...args) => {
 const shell = require('shelljs');
 const { Command } = require('commander');
 const { setDefaultOrg, fzfGetOrg } = require('@crguezl/gh-utilities');
+const { off } = require("process");
 
 const program = new Command();
 program.version(require('./package.json').version);
@@ -192,6 +193,11 @@ members = members.filter(m => regexp.test(m.name) || regexp.test(m.login))
 
 // Decorate: add site
 members.forEach(x => x.site = `https://${x.login}.github.io`)
+
+members.map(x => x.orgurl = `https://github.com/orgs/${org}/people/${x.login}`)
+
+members.forEach(x => x.fullname = `${x?.name || x?.login}`);
+
 // TODO: add teams
 
 /*
@@ -219,33 +225,15 @@ if (options.json) {
   process.exit(0);
 }
 
-if (options.url) {
-  members.forEach(x => console.log(`${x.url}`))
-  process.exit(0);
-}
-if (options.login) {
-  members.forEach(x => console.log(`${x.login}`))
-  process.exit(0);
-}
-
-if (options.orgurl) {
-  members.map(x => x.orgurl = `https://github.com/orgs/${org}/people/${x.login}`)
-  members.forEach(x => console.log(`${x.orgurl}`))
-  process.exit(0);
-}
-
-if (options.site) {
-  members.forEach(x => console.log(x.site))
-  process.exit(0);
-}
-
-if (options.fullname) {
-  members.forEach(x => console.log(`${x.login},"${x.name}",${x.role}`))
-  process.exit(0);
-}
-
-members.forEach(x => console.log(x.login))
-
+members.forEach(x => {
+  let output = [];
+  for (opt of Object.keys(options)) {
+    //console.log(opt);
+    output.push(`"${x[opt]}"`); 
+  }
+  console.log(output.join(","));
+});
+process.exit(0)
 
 
 // parallel console.log at the end. branch print-at-the-end

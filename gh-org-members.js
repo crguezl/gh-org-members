@@ -225,9 +225,14 @@ if (options.json) {
   process.exit(0);
 }
 
+let set = new Set(Object.keys(options));
+set.delete('regexp');
+set.delete('json');
+set.delete('org');
+
 members.forEach(x => {
   let output = [];
-  for (opt of Object.keys(options)) {
+  for (opt of set) {
     //console.log(opt);
     output.push(`"${x[opt]}"`); 
   }

@@ -37,3 +37,14 @@ Options:
 "Casiano Rodriguez-Leon","https://github.com/orgs/ULL-MFP-AET-2122/people/crguezl"
 "Casiano","https://github.com/orgs/ULL-MFP-AET-2122/people/casiano"
 ```
+
+## Aliases
+
+```
+➜  gh-org-members git:(main) gh pwd
+ULL-MFP-AET-2122
+➜  gh-org-members git:(main) gh alias list | grep cd
+cd:     !gh config set current-org "$1" 2>/dev/null
+➜  gh-org-members git:(main) gh alias list | grep pwd
+pwd:    !gh config get current-org
+```

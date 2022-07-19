@@ -38,7 +38,7 @@ Options:
 "Casiano","https://github.com/orgs/ULL-MFP-AET-2122/people/casiano"
 ```
 
-## Aliases
+## Default Organization and Aliases
 
 It helps to have these aliases:
 

@@ -26,6 +26,7 @@ Options:
   - If the organization is not explicitly specified or there is a default org, 
     the selection will be done interactively among the list of your organizations
   - You can set the default organization through the "--default" option for future uses of this program
+   saving it inside the `gh` config file using `gh config set 'current-org' '${org}'`
   - When in fzf, use CTRL-A to select all, tab to select/deselect
 ```
 

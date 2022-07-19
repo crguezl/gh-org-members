@@ -32,24 +32,7 @@ Options:
 ## Example
 
 ```
-➜  github-profile-readme gh org-members ULL-MFP-AET-2122
-AdelaGM
-Alex100260076
-alu0100108859
-alu0100879902
-alu0100948387
-alu0100951844
-amarrerod
-AnabelCP
-casiano
-CGuerra2021
-ChloeBoistel
-crguezl
-ivan-ga
-Jaimetaks
-Juacabga87
-magodelnorte
-ManCurTru
-NoeliaRguezHdez
-Ramallin
+➜  gh-org-members git:(main) ./gh org-members -fwr cas
+"Casiano Rodriguez-Leon","https://github.com/orgs/ULL-MFP-AET-2122/people/crguezl"
+"Casiano","https://github.com/orgs/ULL-MFP-AET-2122/people/casiano"
 ```

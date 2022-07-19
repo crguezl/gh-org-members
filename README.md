@@ -32,18 +32,42 @@ Options:
   - When in fzf, use CTRL-A to select all, tab to select/deselect
 ```
 
-## Example
+## Examples
 
 ```
-➜  gh-org-members git:(main) ./gh org-members -fwr cas
+➜  gh-org-members git:(main) gh org-members -fwr cas
 "Casiano Rodriguez-Leon","https://github.com/orgs/ULL-MFP-AET-2122/people/crguezl"
 "Casiano","https://github.com/orgs/ULL-MFP-AET-2122/people/casiano"
 ```
 
 ```
-➜  gh-org-members git:(main) ./gh-org-members -fusr cas                 
+➜  gh-org-members git:(main) gh org-members -fusr cas                 
 "Casiano Rodriguez-Leon","https://github.com/crguezl","https://crguezl.github.io"
 "Casiano","https://github.com/casiano","https://casiano.github.io"
+```
+
+```
+✗ gh org-members -jr cas   
+[
+  {
+    "login": "crguezl",
+    "name": "Casiano Rodriguez-Leon",
+    "url": "https://github.com/crguezl",
+    "role": "admin",
+    "site": "https://crguezl.github.io",
+    "orgurl": "https://github.com/orgs/ULL-MFP-AET-2122/people/crguezl",
+    "fullname": "Casiano Rodriguez-Leon"
+  },
+  {
+    "login": "casiano",
+    "name": "Casiano",
+    "url": "https://github.com/casiano",
+    "role": "member",
+    "site": "https://casiano.github.io",
+    "orgurl": "https://github.com/orgs/ULL-MFP-AET-2122/people/casiano",
+    "fullname": "Casiano"
+  }
+]
 ```
 
 ## Default Organization and Aliases

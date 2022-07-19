@@ -28,9 +28,9 @@ program
 
 program.addHelpText('after', `
   - If the organization is not explicitly specified or there is a default org, 
-    the selection will be done interactively among the list of your organizations
+    the selection will be done interactively among the list of your organizations using 'fzf'
   - You can set the default organization through the "--default" option for future uses of this program
-  - When in fzf, use CTRL-A to select all, tab to select/deselect
+  - When in 'fzf', use CTRL-A to select all, tab to select/deselect
   `
 );
 

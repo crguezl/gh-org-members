@@ -4,6 +4,8 @@
 gh extension install crguezl/gh-org-members
 ```
 
+It is convenient to have [fzf](https://github.com/junegunn/fzf) installed.
+
 ## Help
 
 ```
@@ -55,4 +57,13 @@ ULL-MFP-AET-2122
 cd:     !gh config set current-org "$1" 2>/dev/null
 ➜  gh-org-members git:(main) gh alias list | grep pwd
 pwd:    !gh config get current-org
+```
+
+```
+➜  gh-org-members git:(develop) ✗ gh alias list | grep getc
+getc:   !yq "$1" ~/.config/gh/config.yml
+➜  gh-org-members git:(develop) ✗ gh getc '."current-org"'
+"ULL-MFP-AET-2122"
+➜  gh-org-members git:(develop) ✗ gh getc '.aliases.todo'  
+"!open https://github.com/crguezl/todo/projects/1"
 ```

@@ -38,6 +38,12 @@ Options:
 "Casiano","https://github.com/orgs/ULL-MFP-AET-2122/people/casiano"
 ```
 
+```
+➜  gh-org-members git:(main) ./gh-org-members -fusr cas                 
+"Casiano Rodriguez-Leon","https://github.com/crguezl","https://crguezl.github.io"
+"Casiano","https://github.com/casiano","https://casiano.github.io"
+```
+
 ## Default Organization and Aliases
 
 It helps to have these aliases:

@@ -34,11 +34,7 @@ Options:
 
 ## Examples
 
-```
-➜  gh-org-members git:(main) gh org-members -fwr cas
-"Casiano Rodriguez-Leon","https://github.com/orgs/ULL-MFP-AET-2122/people/crguezl"
-"Casiano","https://github.com/orgs/ULL-MFP-AET-2122/people/casiano"
-```
+Using several options together and getting info about users matching `cas`:
 
 ```
 ➜  gh-org-members git:(main) gh org-members -fusr cas                 
@@ -46,7 +42,9 @@ Options:
 "Casiano","https://github.com/casiano","https://casiano.github.io"
 ```
 
-```
+The same but in json:
+
+```json
 ✗ gh org-members -jr cas   
 [
   {
@@ -68,6 +66,91 @@ Options:
     "fullname": "Casiano"
   }
 ]
+```
+
+Merging GitHub API info with info from info in a `.csv` file:
+
+```json
+✗ gh org-members -jr sara -c -p ./ULL-MFP-AET-2122.csv
+[
+  {
+    "login": "Alex100260076",
+    "name": "Alejandro Glez. Sarasola",
+    "url": "https://github.com/Alex100260076",
+    "role": "member",
+    "site": "https://Alex100260076.github.io",
+    "orgurl": "https://github.com/orgs/ULL-MFP-AET-2122/people/Alex100260076",
+    "fullname": "Alejandro Glez. Sarasola",
+    "id": "alu0100260076",
+    "orden": "8",
+    "Marca temporal": "26/10/2021 18:16:30",
+    "Nombre 1": "Alejandro",
+    "Apellidos": "González Sarasola",
+    "Nombre": "Alejandro",
+    "Primer Apellido": "González",
+    "Segundo Apellido": "Sarasola",
+    "Grado desde el que accede": "Ingeniería industrial",
+    "Experiencia previa en la Enseñanza": "2",
+    "markdown": "APTO",
+    "profile": "APTO",
+    "web site": "APTO",
+    "pandoc": "APTO+",
+    "TFP DCP": "APTO",
+    "Calculada": "8,8",
+    "Calificador Propuesta": "9",
+    "Calificador propuesta": ""
+  }
+]
+```
+
+If the option `-c` is used but the `.csv` file is not specified via the `-p` option, it will use the most recent 
+`*.csv` file in your `Downloads` folder mathching the regular expression pattern `/${org}.*\.csv/` where `org` refers to the specified or default
+organization:
+
+```
+✗ ls -ltr ~/Downloads/ULL-MFP-AET-2122*                   
+-rw-r--r--@ 1 casianorodriguezleon  staff  3537 20 jul 10:40 /Users/casianorodriguezleon/Downloads/ULL-MFP-AET-2122 - Evaluacion.csv
+```
+
+```json
+✗ gh org-members -jr sara -c   
+[
+  {
+    "login": "Alex100260076",
+    "name": "Alejandro Glez. Sarasola",
+    "url": "https://github.com/Alex100260076",
+    "role": "member",
+    "site": "https://Alex100260076.github.io",
+    "orgurl": "https://github.com/orgs/ULL-MFP-AET-2122/people/Alex100260076",
+    "fullname": "Alejandro Glez. Sarasola",
+    "id": "alu0100260076",
+    "orden": "8",
+    "Marca temporal": "26/10/2021 18:16:30",
+    "Nombre 1": "Alejandro",
+    "Apellidos": "González Sarasola",
+    "Nombre": "Alejandro",
+    "Primer Apellido": "González",
+    "Segundo Apellido": "Sarasola",
+    "Grado desde el que accede": "Ingeniería industrial",
+    "Experiencia previa en la Enseñanza": "2",
+    "markdown": "APTO",
+    "profile": "APTO",
+    "web site": "APTO",
+    "pandoc": "APTO+",
+    "TFP DCP": "APTO",
+    "Calculada": "8,8",
+    "Calificador Propuesta": "9",
+    "Calificador propuesta": ""
+  }
+]
+```
+
+When using `-c` it can be followed by any list of field names in the `.csv` file. 
+for instance:
+
+```
+➜  gh-org-members git:(main) ✗ gh org-members -fr sara -c  'Grado desde el que accede'
+"Alex100260076","Alejandro Glez. Sarasola","https://github.com/Alex100260076","member","https://Alex100260076.github.io","https://github.com/orgs/ULL-MFP-AET-2122/people/Alex100260076","Alejandro Glez. Sarasola","alu0100260076","Ingeniería industrial"
 ```
 
 ## Default Organization and Aliases

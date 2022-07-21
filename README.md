@@ -47,7 +47,7 @@ Using several options together and getting info about users matching `cas`:
 "Casiano","https://github.com/casiano","https://casiano.github.io"
 ```
 
-The same but in json:
+The same but the output is in json:
 
 ```json
 ✗ gh org-members -jr cas   
@@ -73,7 +73,8 @@ The same but in json:
 ]
 ```
 
-Merging GitHub API info with info from info in a `.csv` file:
+Getting not only GitHub API info but also info (option `-c`) from info a specified `.csv` file (option `-p`). 
+The `.csv`file has to have a column `.login` with the GitHub logins of the members. Here we search for student entries matching `sara`:
 
 ```json
 ✗ gh org-members -jr sara -c -p ./ULL-MFP-AET-2122.csv
@@ -109,7 +110,7 @@ Merging GitHub API info with info from info in a `.csv` file:
 ```
 
 If the option `-c` is used but the `.csv` file is not specified via the `-p` option, it will use the most recent 
-`*.csv` file in your `Downloads` folder mathching the regular expression pattern `/${org}.*\.csv/` where `org` refers to the specified or default
+`*.csv` file in your `Downloads` folder matching the regular expression pattern `/${org}.*\.csv/` where `org` refers to the specified or default
 organization:
 
 ```
@@ -154,28 +155,45 @@ When using `-c` it can be followed by any list of field names in the `.csv` file
 for instance:
 
 ```
-➜  gh-org-members git:(main) ✗ gh org-members -fr sara -c  'Grado desde el que accede'
-"Alex100260076","Alejandro Glez. Sarasola","https://github.com/Alex100260076","member","https://Alex100260076.github.io","https://github.com/orgs/ULL-MFP-AET-2122/people/Alex100260076","Alejandro Glez. Sarasola","alu0100260076","Ingeniería industrial"
+✗ gh org-members -r sara -c  Apellidos 'Grado desde el que accede'
+"González Sarasola","Ingeniería industrial"
 ```
 
 ## Default Organization and Aliases
 
-It helps to have these aliases:
+It helps to have these `gh` aliases `gh pwd` and `gh cd` to define the default organization
 
 ```
 ➜  gh-org-members git:(main) gh pwd
 ULL-MFP-AET-2122
+```
+
+This is a definition for the `cd` alias:
+
+```
 ➜  gh-org-members git:(main) gh alias list | grep cd
 cd:     !gh config set current-org "$1" 2>/dev/null
+```
+
+This is a definition for the `pwd` alias:
+
+```
 ➜  gh-org-members git:(main) gh alias list | grep pwd
 pwd:    !gh config get current-org
 ```
 
+Here is another alias that uses the program [yq](https://github.com/mikefarah/yq) to query the `gh` yml configuration file:
+
 ```
 ➜  gh-org-members git:(develop) ✗ gh alias list | grep getc
 getc:   !yq "$1" ~/.config/gh/config.yml
-➜  gh-org-members git:(develop) ✗ gh getc '."current-org"'
+```
+
+It is used this way:
+
+```
+✗ gh getc '."current-org"'
 "ULL-MFP-AET-2122"
-➜  gh-org-members git:(develop) ✗ gh getc '.aliases.todo'  
+✗ gh getc '.aliases.todo'  
 "!open https://github.com/crguezl/todo/projects/1"
 ```

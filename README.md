@@ -164,27 +164,24 @@ for instance:
 Here is an example that give us the marks for a given exercise (the `markdown` exercise):
 
 ```
-✗ ./gh-org-members  -c Apellidos markdown -l | sort -f | cat -n
-
+✗ ./gh-org-members  -c Apellidos markdown -l | egrep -v 'casiano|crguezl' |  sort -f | cat -n
      1  "BOISTEL PÉREZ","APTO","ChloeBoistel"
      2  "CABRERA GARCIA","APTO","Juacabga87"
-     3  "casiano"
-     4  "COELLO PÉREZ","APTO","AnabelCP"
-     5  "crguezl"
-     6  "EXPÓSITO GARCÍA","APTO","alu0100951844"
-     7  "GARCÍA BULLEJOS","APTO","Jaimetaks"
-     8  "GONZALEZ AGUIAR","APTO","ivan-ga"
-     9  "GONZÁLEZ GONZÁLEZ","APTO","alu0100879902"
-    10  "González López","APTO","alu0100108859"
-    11  "González Maury","APTO","AdelaGM"
-    12  "González Sarasola","APTO","Alex100260076"
-    13  "GUERRA OLIVERA","APTO","CGuerra2021"
-    14  "ManCurTru"
-    15  "Marrero Díaz","APTO+","amarrerod"
-    16  "PRIETO CURBELO","APTO","alu0100948387"
-    17  "RAMALLO BENÍTEZ","APTO","Ramallin"
-    18  "RODRIGUEZ HERNANDEZ","APTO","NoeliaRguezHdez"
-    19  "Van Hoye","APTO","magodelnorte"
+     3  "COELLO PÉREZ","APTO","AnabelCP"
+     4  "EXPÓSITO GARCÍA","APTO","alu0100951844"
+     5  "GARCÍA BULLEJOS","APTO","Jaimetaks"
+     6  "GONZALEZ AGUIAR","APTO","ivan-ga"
+     7  "GONZÁLEZ GONZÁLEZ","APTO","alu0100879902"
+     8  "González López","APTO","alu0100108859"
+     9  "González Maury","APTO","AdelaGM"
+    10  "González Sarasola","APTO","Alex100260076"
+    11  "GUERRA OLIVERA","APTO","CGuerra2021"
+    12  "ManCurTru"
+    13  "Marrero Díaz","APTO+","amarrerod"
+    14  "PRIETO CURBELO","APTO","alu0100948387"
+    15  "RAMALLO BENÍTEZ","APTO","Ramallin"
+    16  "RODRIGUEZ HERNANDEZ","APTO","NoeliaRguezHdez"
+    17  "Van Hoye","APTO","magodelnorte"
 ```
 
 There will be error messages for entries in the spreadsheet file that do not have a login in the GitHub organization:
@@ -193,17 +190,10 @@ There will be error messages for entries in the spreadsheet file that do not hav
 Spreadsheet entry:
 "{"orden":"1","Marca temporal":"29/10/2021 0:24:32","Nombre 1":"MANUEL","Apellidos":"CURBELO TRUJILLO","Nombre":"Manuel","Primer Apellido":"Curbelo","Segundo Apellido":"Trujillo","id":"alu0100045130","login":"mancurtru","Grado desde el que accede":"Tecnologías Marinas","Experiencia previa en la Enseñanza":"3","markdown":"APTO","profile":"APTO","web site":"APTO","pandoc":"","TFP DCP":"APTO","Calculada":"6,8","Calificador Propuesta":"7","Calificador propuesta":""}"
 not found in GitHub organization ULL-MFP-AET-2122!
-Spreadsheet entry:
-"{"orden":"9","Marca temporal":"44495,76379","Nombre 1":"Claudia","Apellidos":"González Pérez","Nombre":"Claudia","Primer Apellido":"González Pérez","Segundo Apellido":"","id":"","login":"","Grado desde el que accede":"","Experiencia previa en la Enseñanza":"","markdown":"NP","profile":"NP","web site":"NP","pandoc":"","TFP DCP":"","Calculada":"0","Calificador Propuesta":"0","Calificador propuesta":""}"
-not found in GitHub organization ULL-MFP-AET-2122!
-Spreadsheet entry:
-"{"orden":"12","Marca temporal":"44495,76245","Nombre 1":"Aythami","Apellidos":"Pérez González","Nombre":"Aythami","Primer Apellido":"Pérez González","Segundo Apellido":"","id":"","login":"","Grado desde el que accede":"","Experiencia previa en la Enseñanza":"","markdown":"NP","profile":"NP","web site":"NP","pandoc":"","TFP DCP":"","Calculada":"0","Calificador Propuesta":"0","Calificador propuesta":""}"
-not found in GitHub organization ULL-MFP-AET-2122!
-Spreadsheet entry:
-"{"orden":"16","Marca temporal":"26/10/2021 18:20:54","Nombre 1":"José Carlos","Apellidos":"Ruiz Luque","Nombre":"José Carlos","Primer Apellido":"Ruiz Luque","Segundo Apellido":"","id":"alu0101385464","login":"","Grado desde el que accede":"","Experiencia previa en la Enseñanza":"","markdown":"NP","profile":"NP","web site":"NP","pandoc":"","TFP DCP":"","Calculada":"0","Calificador Propuesta":"0","Calificador propuesta":""}"
-not found in GitHub organization ULL-MFP-AET-2122!
-... etc.
 ```
+The error is due to a misspelling `mancurtru` in the spreadsheet. The actual login is `ManCurTru`.
+Once is fixed, we get the correct ouput row: `"CURBELO TRUJILLO","APTO","ManCurTru"`
+
 
 ## Default Organization and Aliases
 

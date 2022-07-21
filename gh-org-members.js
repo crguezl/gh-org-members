@@ -134,7 +134,7 @@ program
   .usage("[options] [organization]")
   .option('-f, --fullname', 'show name of the user (if available)')
   .option('-j, --json', 'returns the full json object')
-  .option('-r, --regexp <regexp>', 'filter <query> results using <regexp>')
+  .option('-r, --regexp <regexp>', 'Only members with some field matching <regexp> will be shown')
   .option('-u, --url', 'show github user url')
   .option('-l, --login', 'show github user login')
   .option('-w, --orgurl', 'show github user url as a member of the org')

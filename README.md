@@ -9,14 +9,14 @@ It is convenient to have [fzf](https://github.com/junegunn/fzf) installed.
 ## Help
 
 ```
-✗ ./gh-org-members -h
+✗ ./gh-org-members                                                       
 Usage: gh org-members [options] [organization]
 
 Options:
   -V, --version             output the version number
   -f, --fullname            show name of the user (if available)
   -j, --json                returns the full json object
-  -r, --regexp <regexp>     filter <query> results using <regexp>
+  -r, --regexp <regexp>     Only members with some field matching <regexp> will be shown
   -u, --url                 show github user url
   -l, --login               show github user login
   -w, --orgurl              show github user url as a member of the org
@@ -73,7 +73,7 @@ The same but the output is in json:
 ]
 ```
 
-Getting not only GitHub API info but also info (option `-c`) from info a specified `.csv` file (option `-p`). 
+Getting not only GitHub API info but also info (option `-c`) from a specified `.csv` file (option `-p`). 
 The `.csv`file has to have a column `.login` with the GitHub logins of the members. Here we search for student entries matching `sara`:
 
 ```json
@@ -109,7 +109,7 @@ The `.csv`file has to have a column `.login` with the GitHub logins of the membe
 ]
 ```
 
-If the option `-c` is used but the `.csv` file is not specified via the `-p` option, it will use the most recent 
+If the option `-c` is used, but the `.csv` file is not specified via the `-p` option, it will use the most recent 
 `*.csv` file in your `Downloads` folder matching the regular expression pattern `/${org}.*\.csv/` where `org` refers to the specified or default
 organization:
 
@@ -117,6 +117,8 @@ organization:
 ✗ ls -ltr ~/Downloads/ULL-MFP-AET-2122*                   
 -rw-r--r--@ 1 casianorodriguezleon  staff  3537 20 jul 10:40 /Users/casianorodriguezleon/Downloads/ULL-MFP-AET-2122 - Evaluacion.csv
 ```
+
+In this example, we don't specify the `.csv` file and it will use the file `/Users/casianorodriguezleon/Downloads/ULL-MFP-AET-2122 - Evaluacion.csv`:
 
 ```json
 ✗ gh org-members -jr sara -c   
@@ -161,11 +163,20 @@ for instance:
 
 ## Default Organization and Aliases
 
-It helps to have these `gh` aliases `gh pwd` and `gh cd` to define the default organization
+It helps to have these `gh` aliases `gh pwd` and `gh cd` to get and define the default organization
+
+Here is an example of use:
 
 ```
-➜  gh-org-members git:(main) gh pwd
+➜  gh-org-members git:(main) ✗ gh cd ULL-MFP-AET-2122
+➜  gh-org-members git:(main) ✗ gh pwd
 ULL-MFP-AET-2122
+```
+
+```
+➜  gh-org-members git:(main) ✗ gh cd ULL-ESIT-PL-2122
+➜  gh-org-members git:(main) ✗ gh pwd
+ULL-ESIT-PL-2122
 ```
 
 This is a definition for the `cd` alias:

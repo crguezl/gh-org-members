@@ -1,7 +1,7 @@
 ## Installation
 
 ```
-gh extension install crguezl/gh-org-members
+gh extension install crguezgh org-members
 ```
 
 It is convenient to have [fzf](https://github.com/junegunn/fzf) installed.
@@ -9,7 +9,7 @@ It is convenient to have [fzf](https://github.com/junegunn/fzf) installed.
 ## Help
 
 ```
-✗ ./gh-org-members                                                       
+✗ gh org-members                                                       
 Usage: gh org-members [options] [organization]
 
 Options:
@@ -164,7 +164,7 @@ for instance:
 Here is an example that give us the marks for a given exercise (the `markdown` exercise):
 
 ```
-✗ ./gh-org-members  -c Apellidos markdown -l | egrep -v 'casiano|crguezl' |  sort -f | cat -n
+✗ gh org-members  -c Apellidos markdown -l | egrep -v 'casiano|crguezl' |  sort -f | cat -n
      1  "BOISTEL PÉREZ","APTO","ChloeBoistel"
      2  "CABRERA GARCIA","APTO","Juacabga87"
      3  "COELLO PÉREZ","APTO","AnabelCP"

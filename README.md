@@ -9,27 +9,32 @@ It is convenient to have [fzf](https://github.com/junegunn/fzf) installed.
 ## Help
 
 ```
-✗ gh org-members -h
+✗ ./gh-org-members -h
 Usage: gh org-members [options] [organization]
 
 Options:
-  -V, --version          output the version number
-  -f, --fullname         show name of the user (if available)
-  -j, --json             returns the full json object
-  -r, --regexp <regexp>  filter <query> results using <regexp>
-  -u, --url              show github user url
-  -l, --login            show github user login
-  -w, --orgurl           show github user url as a member of the org
-  -s, --site             show url of the members github pages web sites
-  -o --org <org>         default organization or user
-     --default           Set selected "org" as default organization for future uses
-  -h, --help             display help for command
+  -V, --version             output the version number
+  -f, --fullname            show name of the user (if available)
+  -j, --json                returns the full json object
+  -r, --regexp <regexp>     filter <query> results using <regexp>
+  -u, --url                 show github user url
+  -l, --login               show github user login
+  -w, --orgurl              show github user url as a member of the org
+  -s, --site                show url of the members github pages web sites
+  -c, --csv [field...]      shows the values of the fields of the organization csv
+  -p, --pathcsv <csv file>  path to the csv file
+  -o --org <org>            default organization
+     --default              Set selected "org" as default organization for future uses
+  -h, --help                display help for command
 
   - If the organization is not explicitly specified or there is a default org, 
-    the selection will be done interactively among the list of your organizations
+    the selection will be done interactively among the list of your organizations using 'fzf'
   - You can set the default organization through the "--default" option for future uses of this program
-   saving it inside the `gh` config file using `gh config set 'current-org' '${org}'`
-  - When in fzf, use CTRL-A to select all, tab to select/deselect
+  - When in 'fzf', use CTRL-A to select all, tab to select/deselect
+  - You can merge the results of the GitHub API info with info from info in a '.csv' file using the "-c" and "-p" options. For instance: "gh org-members -jr sara -c -p ./ULL-MFP-AET-2122.csv"
+  - If the option '-c' is used but the '.csv' file is not specified via the '-p' option, it will use the most recent '*.csv' file in your 'Downloads' folder mathching the regular expression pattern '/<org>.*.csv/' where 'org' refers to the specified or default organization  
+  - When using '-c' it can be followed by any list of field names in the '.csv' file. 
+  - The '.csv' file has to have a column named 'login' having the Github login of the members
 ```
 
 ## Examples

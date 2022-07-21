@@ -152,6 +152,7 @@ program.addHelpText('after', `
   - You can merge the results of the GitHub API info with info from info in a '.csv' file using the "-c" and "-p" options. For instance: "gh org-members -jr sara -c -p ./ULL-MFP-AET-2122.csv"
   - If the option '-c' is used but the '.csv' file is not specified via the '-p' option, it will use the most recent '*.csv' file in your 'Downloads' folder mathching the regular expression pattern '/<org>.*\.csv/' where 'org' refers to the specified or default organization  
   - When using '-c' it can be followed by any list of field names in the '.csv' file. 
+  - The '.csv' file has to have a column named 'login' having the Github login of the members
 
   `
 );

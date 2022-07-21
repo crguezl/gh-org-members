@@ -99,9 +99,11 @@ function main(members, options, org) {
     .then((jsonObj)=>{
         let csvKeys = Object.keys(jsonObj[0]);
         jsonObj.forEach((x, j) => {
+          let xfound = false;
           members.forEach(m => {
             if (m.login === x.login) {
               //console.log(`${m.login},${x.id}`);
+              xfound = true;
               if (x.id) m.id = x.id;
               //console.log(options.csv)
               if (Array.isArray(options.csv)) {
@@ -114,6 +116,7 @@ function main(members, options, org) {
               }
             }
           });
+          if (!xfound) console.error(`Spreadsheet entry:\n"${JSON.stringify(x)}"\nnot found in GitHub organization ${org}!`);
         });
         writeMembers(members, options, csvKeys);
     })

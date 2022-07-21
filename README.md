@@ -205,6 +205,6 @@ It is used this way:
 ```
 ✗ gh getc '."current-org"'
 "ULL-MFP-AET-2122"
-✗ gh getc '.aliases.todo'  
-"!open https://github.com/crguezl/todo/projects/1"
+✗ gh getc '.aliases.cd'  
+"!gh config set current-org \"$1\" 2>/dev/null"
 ```

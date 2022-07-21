@@ -160,6 +160,9 @@ program.addHelpText('after', `
 
 program.parse(process.argv);
 const options = program.opts();
+if (Object.keys(options).length === 0) {
+  program.help();
+}
 
 const deb = (...args) => {
   console.error(ins(...args, { depth: null }));

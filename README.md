@@ -1,7 +1,7 @@
 ## Installation
 
 ```
-gh extension install crguezgh org-members
+gh extension install crguezl/gh-org-members
 ```
 
 It is convenient to have [fzf](https://github.com/junegunn/fzf) installed.

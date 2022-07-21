@@ -1,17 +1,31 @@
 const ins = require("util").inspect;
-
 const shell = require('shelljs');
 const { Command } = require('commander');
 const { getMembers, showError, setDefaultOrg, fzfGetOrg } = require('@crguezl/gh-utilities');
-//const homedir = require('os').homedir();
 
-function writeMembers(members, options) {
+function writeMembers(members, options, csvKeys) {
+  if (regexp) {
+    members = members.filter(m => {
+      let someFieldMatch = false;
+       
+      //console.log(`${m.login}`);
+      for(let k of Object.keys(m)) {
+        //console.log(k);
+        if (regexp.test(m[k])) { 
+          someFieldMatch = true; 
+          break;
+        }
+      }
+      return someFieldMatch;
+    });  
+  }
+
   if (options.json) {
     console.log(JSON.stringify(members, null, 2));
     process.exit(0);
   }
   
-  let set = new Set(Object.keys(members[0]));
+  let set = new Set(Object.keys(options));
   set.delete('regexp');
   set.delete('json');
   set.delete('org');
@@ -21,7 +35,18 @@ function writeMembers(members, options) {
     let output = [];
     for (opt of set) {
       //console.log(opt);
-      output.push(`"${x[opt]}"`);
+      if (opt !== 'csv') output.push(`"${x[opt]}"`);
+      else { // opt is csv
+        if (Array.isArray(options.csv)) {
+          options.csv.forEach(c => {
+            if (x[c]) output.push(`"${x[c]}"`);
+          })
+        } else {
+          csvKeys.forEach(c => {
+            if (x[c]) output.push(`"${x[c]}"`);
+          });
+        }
+      }      
     }
     console.log(output.join(","));
   });
@@ -30,7 +55,6 @@ function writeMembers(members, options) {
 
 function main(members, options, org) {
 
-  members = members.filter(m => regexp.test(m.name) || regexp.test(m.login))
   // read the csv file and decorate the filtered members with the additional info
   // Get the teams of those members and decorate the result with the team info
   
@@ -53,8 +77,8 @@ function main(members, options, org) {
   
       var downloadsDir = downloadsFolder(); // your downloads directory
       let escapedOrg = org.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-      let regexp = new RegExp(`^${escapedOrg}.*\\.csv$`);
-      var files = fs.readdirSync(downloadsFolder()).filter(file => file.match(regexp)).map(file => path.join(downloadsDir, file));
+      let csvFileRegexp = new RegExp(`^${escapedOrg}.*\\.csv$`);
+      var files = fs.readdirSync(downloadsFolder()).filter(file => file.match(csvFileRegexp)).map(file => path.join(downloadsDir, file));
       //console.log(files);
       if (files.length === 0) {
         console.error(`No csv file matching regexp pattern /${regexp.source}/ found for organization "${org}" in folder "${downloadsDir}"`);
@@ -73,6 +97,7 @@ function main(members, options, org) {
     csv()
     .fromFile(csvFilePath)
     .then((jsonObj)=>{
+        let csvKeys = Object.keys(jsonObj[0]);
         jsonObj.forEach((x, j) => {
           members.forEach(m => {
             if (m.login === x.login) {
@@ -90,14 +115,14 @@ function main(members, options, org) {
             }
           });
         });
-        writeMembers(members, options);
+        writeMembers(members, options, csvKeys);
     })
     .catch(err =>{
       console.error(`Error trying to  read file "${csvFilePath}"\n${err}`);
       process.exit(1);
     })  
   } else {
-    writeMembers(members, options);
+    writeMembers(members, options, null);
   };
 } // end main
 
@@ -124,6 +149,10 @@ program.addHelpText('after', `
     the selection will be done interactively among the list of your organizations using 'fzf'
   - You can set the default organization through the "--default" option for future uses of this program
   - When in 'fzf', use CTRL-A to select all, tab to select/deselect
+  - You can merge the results of the GitHub API info with info from info in a '.csv' file using the "-c" and "-p" options. For instance: "gh org-members -jr sara -c -p ./ULL-MFP-AET-2122.csv"
+  - If the option '-c' is used but the '.csv' file is not specified via the '-p' option, it will use the most recent '*.csv' file in your 'Downloads' folder mathching the regular expression pattern '/<org>.*\.csv/' where 'org' refers to the specified or default organization  
+  - When using '-c' it can be followed by any list of field names in the '.csv' file. 
+
   `
 );
 

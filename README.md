@@ -37,7 +37,7 @@ Options:
   - The '.csv' file has to have a column named 'login' having the Github login of the members
 ```
 
-## Examples
+## Simple Examples
 
 Using several options together and getting info about users matching `cas`:
 
@@ -72,6 +72,8 @@ The same but the output is in json:
   }
 ]
 ```
+
+## Adding info from a Spreadsheet 
 
 Getting not only GitHub API info but also info (option `-c`) from a specified `.csv` file (option `-p`). 
 The `.csv`file has to have a column `.login` with the GitHub logins of the members. Here we search for student entries matching `sara`:

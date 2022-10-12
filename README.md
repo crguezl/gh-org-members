@@ -76,7 +76,10 @@ The same but the output is in json:
 ## Adding info from a Spreadsheet 
 
 Getting not only GitHub API info but also info (option `-c`) from a specified `.csv` file (option `-p`). 
-The `.csv`file has to have a column `.login` with the GitHub logins of the members. Here we search for student entries matching `sara`:
+
+⚠️ **The `.csv`file has to have a column `.login` with the GitHub logins of the members**. 
+
+Here we search for student entries matching `sara`:
 
 ```json
 ✗ gh org-members -jr sara -c -p ./ULL-MFP-AET-2122.csv

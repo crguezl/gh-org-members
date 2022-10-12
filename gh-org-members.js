@@ -97,26 +97,29 @@ function main(members, options, org) {
     csv()
     .fromFile(csvFilePath)
     .then((jsonObj)=>{
+        // console.log(JSON.stringify(jsonObj, null, 2));
         let csvKeys = Object.keys(jsonObj[0]);
         jsonObj.forEach((x, j) => {
-          let xfound = false;
-          members.forEach(m => {
-            if (m.login === x.login) {
-              //console.log(`${m.login},${x.id}`);
-              xfound = true;
-              if (x.id) m.id = x.id;
-              //console.log(options.csv)
-              if (Array.isArray(options.csv)) {
-                options.csv.forEach(c => {
-                  m[c] = x[c];
+          if (x.login && x.login.length) {
+            let xfound = false;
+            members.forEach(m => {
+              if (m.login === x.login) {
+                //console.log(`${m.login},${x.id}`);
+                xfound = true;
+                if (x.id) m.id = x.id;
+                //console.log(options.csv)
+                if (Array.isArray(options.csv)) {
+                  options.csv.forEach(c => {
+                    m[c] = x[c];
+                  }
+                  )
+                } else {
+                  m = Object.assign(m, x);
                 }
-                )
-              } else {
-                m = Object.assign(m, x);
               }
-            }
-          });
-          if (!xfound) console.error(`Spreadsheet entry:\n"${JSON.stringify(x)}"\nnot found in GitHub organization ${org}!`);
+            });
+            if (!xfound) console.error(`Spreadsheet entry:\n"${JSON.stringify(x)}"\nnot found in GitHub organization ${org}!`);
+          }
         });
         writeMembers(members, options, csvKeys);
     })
